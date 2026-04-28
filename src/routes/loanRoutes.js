@@ -3,8 +3,7 @@ import { LoanController } from '../controllers/loanController.js';
 
 const router = express.Router();
 
+// This is the specific endpoint required by your assignment
 router.get('/top-borrowers', LoanController.getTopBorrowers);
-router.get('/', LoanController.getLoans);
-router.post('/', LoanController.createLoan);
 
 export default router;
