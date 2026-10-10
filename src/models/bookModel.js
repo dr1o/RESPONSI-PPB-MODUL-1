@@ -1,31 +1,69 @@
-import { pool } from '../config/db.js';
+import { supabase } from '../config/db.js';
 
 export const BookModel = {
-  // Mengambil semua buku dengan nama penulis dan kategori (JOIN)
   async getAll() {
-    const query = `
-      SELECT b.*, a.name as author_name, c.name as category_name 
-      FROM books b
-      LEFT JOIN authors a ON b.author_id = a.id
-      LEFT JOIN categories c ON b.category_id = c.id
-    `;
-    const result = await pool.query(query);
-    return result.rows;
+    const { data, error } = await supabase
+      .from('books')
+      .select('*, authors(id, name, nationality), categories(id, name)')
+      .order('id', { ascending: true });
+
+    if (error) throw new Error(error.message);
+    return data;
   },
 
-  async create(data) {
-    const { isbn, title, author_id, category_id, total_copies } = data;
-    const query = `
-      INSERT INTO books (isbn, title, author_id, category_id, total_copies, available_copies)
-      VALUES ($1, $2, $3, $4, $5, $5) RETURNING *
-    `;
-    const result = await pool.query(query, [isbn, title, author_id, category_id, total_copies]);
-    return result.rows[0];
+  async getById(id) {
+    const { data, error } = await supabase
+      .from('books')
+      .select('*, authors(id, name, nationality), categories(id, name)')
+      .eq('id', id)
+      .single();
+
+    if (error) throw new Error('Buku tidak ditemukan.');
+    return data;
+  },
+
+  async create(payload) {
+    const { isbn, title, author_id, category_id, total_copies = 1, available_copies } = payload;
+    const { data, error } = await supabase
+      .from('books')
+      .insert([
+        {
+          isbn,
+          title,
+          author_id: author_id || null,
+          category_id: category_id || null,
+          total_copies,
+          available_copies: available_copies !== undefined ? available_copies : total_copies
+        }
+      ])
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  async update(id, payload) {
+    const { data, error } = await supabase
+      .from('books')
+      .update(payload)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
   },
 
   async delete(id) {
-    const query = 'DELETE FROM books WHERE id = $1';
-    await pool.query(query, [id]);
-    return { message: "Buku berhasil dihapus dari sistem." };
+    const { data, error } = await supabase
+      .from('books')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
   }
 };

@@ -1,13 +1,59 @@
-import { pool } from '../config/db.js';
+import { supabase } from '../config/db.js';
 
 export const AuthorModel = {
   async getAll() {
-    const result = await pool.query('SELECT * FROM authors ORDER BY name ASC');
-    return result.rows;
+    const { data, error } = await supabase
+      .from('authors')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) throw new Error(error.message);
+    return data;
   },
-  async create(name, nationality) {
-    const query = 'INSERT INTO authors (name, nationality) VALUES ($1, $2) RETURNING *';
-    const result = await pool.query(query, [name, nationality]);
-    return result.rows[0];
+
+  async getById(id) {
+    const { data, error } = await supabase
+      .from('authors')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw new Error('Penulis tidak ditemukan.');
+    return data;
+  },
+
+  async create(name, nationality = 'Indonesia') {
+    const { data, error } = await supabase
+      .from('authors')
+      .insert([{ name, nationality }])
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  async update(id, payload) {
+    const { data, error } = await supabase
+      .from('authors')
+      .update(payload)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  async delete(id) {
+    const { data, error } = await supabase
+      .from('authors')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
   }
 };

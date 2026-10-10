@@ -1,18 +1,60 @@
-import { pool } from '../config/db.js';
+import { supabase } from '../config/db.js';
 
 export const MemberModel = {
   async getAll() {
-    const result = await pool.query('SELECT * FROM members ORDER BY joined_at DESC');
-    return result.rows;
+    const { data, error } = await supabase
+      .from('members')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) throw new Error(error.message);
+    return data;
   },
 
-  async create(data) {
-    const { full_name, email, member_type } = data;
-    const query = `
-      INSERT INTO members (full_name, email, member_type) 
-      VALUES ($1, $2, $3) RETURNING *
-    `;
-    const result = await pool.query(query, [full_name, email, member_type]);
-    return result.rows[0];
+  async getById(id) {
+    const { data, error } = await supabase
+      .from('members')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw new Error('Anggota tidak ditemukan.');
+    return data;
+  },
+
+  async create(payload) {
+    const { full_name, email, member_type = 'STUDENT' } = payload;
+    const { data, error } = await supabase
+      .from('members')
+      .insert([{ full_name, email, member_type }])
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  async update(id, payload) {
+    const { data, error } = await supabase
+      .from('members')
+      .update(payload)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  async delete(id) {
+    const { data, error } = await supabase
+      .from('members')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
   }
 };
