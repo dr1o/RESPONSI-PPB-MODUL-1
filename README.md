@@ -23,9 +23,9 @@ Smart Library API adalah layanan backend RESTful API yang dirancang untuk memper
 
 ## 2. Link Hasil Deployment Vercel
 
-- Base URL Production (Vercel): `https://responsi-ppb-modul-1.vercel.app`
-- Endpoint Utama Peminjaman: `https://responsi-ppb-modul-1.vercel.app/loans`
-- Contoh Filter Status Terlambat: `https://responsi-ppb-modul-1.vercel.app/loans?status=Terlambat`
+- Base URL Production (Vercel): `https://<NAMA-PROJECT-ANDA>.vercel.app`
+- Endpoint Utama Peminjaman: `https://<NAMA-PROJECT-ANDA>.vercel.app/loans`
+- Contoh Filter Status Terlambat: `https://<NAMA-PROJECT-ANDA>.vercel.app/loans?status=Terlambat`
 
 Catatan: Seluruh endpoint dapat diakses melalui prefix langsung (misal `/loans`) maupun dengan prefix `/api` (misal `/api/loans`).
 
