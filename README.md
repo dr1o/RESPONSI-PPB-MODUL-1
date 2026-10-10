@@ -1,39 +1,39 @@
 # Smart Library API — Layanan Pencatatan Peminjaman Buku Perpustakaan
 
-REST API berbasis **Node.js**, **Express.js**, dan **Supabase (PostgreSQL)** untuk mengelola layanan pencatatan peminjaman buku perpustakaan oleh anggota. Dibuat untuk memenuhi tugas **Responsi Praktikum PPB 2026**.
+REST API berbasis Node.js, Express.js, dan Supabase (PostgreSQL) untuk mengelola layanan pencatatan peminjaman buku perpustakaan oleh anggota. Dibuat untuk memenuhi tugas Responsi Praktikum PPB 2026.
 
 ---
 
 ## 1. Deskripsi Umum & Tujuan Proyek
 
-**Smart Library API** adalah layanan backend RESTful API yang dirancang untuk mempermudah pencatatan dan pengelolaan transaksi peminjaman buku di perpustakaan secara digital.
+Smart Library API adalah layanan backend RESTful API yang dirancang untuk mempermudah pencatatan dan pengelolaan transaksi peminjaman buku di perpustakaan secara digital.
 
 ### Tujuan Proyek:
-- Menyediakan layanan **CRUD (Create, Read, Update, Delete)** penuh untuk data peminjaman buku (`loans`), serta data pendukung seperti buku (`books`), anggota (`members`), penulis (`authors`), dan kategori (`categories`).
-- Menyediakan fitur **filter query** pada data peminjaman (contoh: `GET /loans?status=Terlambat`, `GET /loans?status=Dipinjam`, `GET /loans?status=Dikembalikan`).
+- Menyediakan layanan CRUD (Create, Read, Update, Delete) penuh untuk data peminjaman buku (`loans`), serta data pendukung seperti buku (`books`), anggota (`members`), penulis (`authors`), dan kategori (`categories`).
+- Menyediakan fitur filter query pada data peminjaman (contoh: `GET /loans?status=Terlambat`, `GET /loans?status=Dipinjam`, `GET /loans?status=Dikembalikan`).
 - Mengotomatisasi manajemen ketersediaan stok buku (`available_copies`) saat buku dipinjam maupun saat dikembalikan.
-- Menyediakan endpoint publik yang di-deploy menggunakan **Vercel** dan terhubung dengan cloud database **Supabase**.
+- Menyediakan endpoint publik yang di-deploy menggunakan Vercel dan terhubung dengan cloud database Supabase.
 
 ### Teknologi yang Digunakan:
-- **Runtime & Framework:** Node.js & Express.js (`v5.x`)
-- **Database:** Supabase (PostgreSQL) via `@supabase/supabase-js`
-- **Deployment:** Vercel Serverless Functions
+- Runtime & Framework: Node.js & Express.js (`v5.x`)
+- Database: Supabase (PostgreSQL) via `@supabase/supabase-js`
+- Deployment: Vercel Serverless Functions
 
 ---
 
 ## 2. Link Hasil Deployment Vercel
 
-- **Base URL Production (Vercel):** `https://<NAMA-PROJECT-ANDA>.vercel.app` *(Ganti dengan URL Vercel setelah deploy)*
-- **Endpoint Utama Peminjaman:** `https://<NAMA-PROJECT-ANDA>.vercel.app/loans`
-- **Contoh Filter Status Terlambat:** `https://<NAMA-PROJECT-ANDA>.vercel.app/loans?status=Terlambat`
+- Base URL Production (Vercel): `https://<NAMA-PROJECT-ANDA>.vercel.app`
+- Endpoint Utama Peminjaman: `https://<NAMA-PROJECT-ANDA>.vercel.app/loans`
+- Contoh Filter Status Terlambat: `https://<NAMA-PROJECT-ANDA>.vercel.app/loans?status=Terlambat`
 
-> **Catatan:** Seluruh endpoint dapat diakses melalui prefix langsung (misal `/loans`) maupun dengan prefix `/api` (misal `/api/loans`).
+Catatan: Seluruh endpoint dapat diakses melalui prefix langsung (misal `/loans`) maupun dengan prefix `/api` (misal `/api/loans`).
 
 ---
 
 ## 3. Struktur Data / Schema Database
 
-Skema lengkap beserta data awal (*seed data*) telah disediakan pada file [`supabase_schema.sql`](./supabase_schema.sql).
+Skema lengkap beserta data awal (seed data) telah disediakan pada file `supabase_schema.sql`.
 
 ### A. Tabel `loans` (Tabel Utama Peminjaman Buku)
 | Nama Kolom | Tipe Data | Keterangan |
@@ -75,9 +75,9 @@ Skema lengkap beserta data awal (*seed data*) telah disediakan pada file [`supab
 ## 4. Contoh Request dan Response
 
 ### A. Ambil Semua Data Peminjaman (`GET /loans`)
-- **Method:** `GET`
-- **URL:** `/loans` (atau `/api/loans`)
-- **Response (`200 OK`):**
+- Method: `GET`
+- URL: `/loans` (atau `/api/loans`)
+- Response (`200 OK`):
 ```json
 {
   "status": "success",
@@ -115,9 +115,9 @@ Skema lengkap beserta data awal (*seed data*) telah disediakan pada file [`supab
 
 ### B. Filter Peminjaman Berdasarkan Query (`GET /loans?status=Terlambat`)
 Mendukung query parameter `status` (`Dipinjam`, `Terlambat`, `Dikembalikan`), `member_id`, `book_id`, `member_name`, dan `book_title`.
-- **Method:** `GET`
-- **URL:** `/loans?status=Terlambat`
-- **Response (`200 OK`):**
+- Method: `GET`
+- URL: `/loans?status=Terlambat`
+- Response (`200 OK`):
 ```json
 {
   "status": "success",
@@ -157,9 +157,9 @@ Mendukung query parameter `status` (`Dipinjam`, `Terlambat`, `Dikembalikan`), `m
 ---
 
 ### C. Ambil Detail Peminjaman Berdasarkan ID (`GET /loans/:id`)
-- **Method:** `GET`
-- **URL:** `/loans/1`
-- **Response (`200 OK`):**
+- Method: `GET`
+- URL: `/loans/1`
+- Response (`200 OK`):
 ```json
 {
   "status": "success",
@@ -181,10 +181,10 @@ Mendukung query parameter `status` (`Dipinjam`, `Terlambat`, `Dikembalikan`), `m
 ---
 
 ### D. Tambah Peminjaman Buku Baru (`POST /loans`)
-Dapat mengirimkan `book_id` & `member_id` (relasional) **atau** langsung mengirimkan `book_title` & `member_name`.
-- **Method:** `POST`
-- **URL:** `/loans`
-- **Request Body (`application/json`):**
+Dapat mengirimkan `book_id` & `member_id` (relasional) atau langsung mengirimkan `book_title` & `member_name`.
+- Method: `POST`
+- URL: `/loans`
+- Request Body (`application/json`):
 ```json
 {
   "book_id": 1,
@@ -195,7 +195,7 @@ Dapat mengirimkan `book_id` & `member_id` (relasional) **atau** langsung mengiri
   "notes": "Peminjaman buku untuk referensi tugas"
 }
 ```
-- **Response (`201 Created`):**
+- Response (`201 Created`):
 ```json
 {
   "status": "success",
@@ -219,16 +219,16 @@ Dapat mengirimkan `book_id` & `member_id` (relasional) **atau** langsung mengiri
 
 ### E. Perbarui Data / Status Peminjaman (`PUT /loans/:id` atau `PATCH /loans/:id`)
 Jika `status` diubah menjadi `"Dikembalikan"`, sistem otomatis mengisi `return_date` dengan tanggal hari ini dan mengembalikan stok `available_copies` buku.
-- **Method:** `PUT`
-- **URL:** `/loans/5`
-- **Request Body (`application/json`):**
+- Method: `PUT`
+- URL: `/loans/5`
+- Request Body (`application/json`):
 ```json
 {
   "status": "Dikembalikan",
   "notes": "Buku telah dikembalikan tepat waktu"
 }
 ```
-- **Response (`200 OK`):**
+- Response (`200 OK`):
 ```json
 {
   "status": "success",
@@ -251,9 +251,9 @@ Jika `status` diubah menjadi `"Dikembalikan"`, sistem otomatis mengisi `return_d
 ---
 
 ### F. Hapus Data Peminjaman (`DELETE /loans/:id`)
-- **Method:** `DELETE`
-- **URL:** `/loans/5`
-- **Response (`200 OK`):**
+- Method: `DELETE`
+- URL: `/loans/5`
+- Response (`200 OK`):
 ```json
 {
   "status": "success",
@@ -273,50 +273,50 @@ Jika `status` diubah menjadi `"Dikembalikan"`, sistem otomatis mengisi `return_d
 
 ### G. Daftar Endpoint Pendukung Lainnya
 Selain `/loans`, API ini juga mendukung operasi CRUD penuh (`GET`, `GET /:id`, `POST`, `PUT /:id`, `DELETE /:id`) pada entitas berikut:
-- **Books:** `/books` (atau `/api/books`)
-- **Members:** `/members` (atau `/api/members`)
-- **Authors:** `/authors` (atau `/api/authors`)
-- **Categories:** `/categories` (atau `/api/categories`)
+- Books: `/books` (atau `/api/books`)
+- Members: `/members` (atau `/api/members`)
+- Authors: `/authors` (atau `/api/authors`)
+- Categories: `/categories` (atau `/api/categories`)
 
 ---
 
 ## 5. Panduan Instalasi & Cara Menjalankan Lokal
 
 ### Prasyarat:
-- **Node.js** (v18 atau lebih baru)
-- Akun & Project **Supabase**
+- Node.js (v18 atau lebih baru)
+- Akun & Project Supabase
 
 ### Langkah-langkah:
 
-1. **Clone repository ini:**
+1. Clone repository ini:
    ```bash
    git clone https://github.com/dr1o/RESPONSI-PPB-MODUL-1.git
    cd RESPONSI-PPB-MODUL-1
    ```
 
-2. **Install dependencies:**
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. **Siapkan Database di Supabase:**
-   - Buka dashboard [Supabase](https://supabase.com) dan buat project baru.
-   - Masuk ke menu **SQL Editor** → klik **New Query**.
-   - Salin seluruh isi file [`supabase_schema.sql`](./supabase_schema.sql), tempelkan ke editor, lalu klik **Run**.
+3. Siapkan Database di Supabase:
+   - Buka dashboard Supabase (https://supabase.com) dan buat project baru.
+   - Masuk ke menu SQL Editor -> klik New Query.
+   - Salin seluruh isi file `supabase_schema.sql`, tempelkan ke editor, lalu klik Run.
 
-4. **Konfigurasi Environment Variables (`.env`):**
+4. Konfigurasi Environment Variables (`.env`):
    - Salin file `.env.example` menjadi `.env`:
      ```bash
      cp .env.example .env
      ```
-   - Isi `SUPABASE_URL` dan `SUPABASE_KEY` (ambil dari menu **Project Settings → Data API** di Supabase):
+   - Isi `SUPABASE_URL` dan `SUPABASE_KEY` (ambil dari menu Project Settings -> Data API / API Keys di Supabase):
      ```env
      SUPABASE_URL=https://xxxx.supabase.co
-     SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+     SUPABASE_KEY=sb_publishable_xxxx
      PORT=3000
      ```
 
-5. **Jalankan server di lokal:**
+5. Jalankan server di lokal:
    ```bash
    # Mode development (auto-reload dengan nodemon)
    npm run dev
@@ -325,7 +325,7 @@ Selain `/loans`, API ini juga mendukung operasi CRUD penuh (`GET`, `GET /:id`, `
    npm start
    ```
 
-6. **Uji Endpoint di Browser / Postman:**
+6. Uji Endpoint di Browser / Postman:
    - Buka `http://localhost:3000`
    - Uji daftar peminjaman: `http://localhost:3000/loans`
    - Uji filter status terlambat: `http://localhost:3000/loans?status=Terlambat`
